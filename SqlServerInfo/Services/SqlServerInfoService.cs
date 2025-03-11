@@ -50,7 +50,7 @@ public sealed class SqlServerInfoService : ISqlServerInfoService
     }
 
     public async IAsyncEnumerable<DatabaseInfo> GetDatabasesAsyncEnumerable(
-        string connectionString, 
+        string connectionString,
         [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         if (cancellationToken.IsCancellationRequested)
@@ -105,8 +105,8 @@ public sealed class SqlServerInfoService : ISqlServerInfoService
     }
 
     private static async Task PopulateTable(
-        SqlConnection dbConn, 
-        string tableName, 
+        SqlConnection dbConn,
+        string tableName,
         List<ColumnInfo> columns)
     {
         await using var cmd = new SqlCommand(SqlServerInfoServiceSqlScripts.GetColumnsSql, dbConn);
@@ -123,8 +123,8 @@ public sealed class SqlServerInfoService : ISqlServerInfoService
     }
 
     private static async Task PopulateKeys(
-        SqlConnection dbConn, 
-        string tableName, 
+        SqlConnection dbConn,
+        string tableName,
         List<KeyInfo> keys)
     {
         await using var keyCmd = new SqlCommand(SqlServerInfoServiceSqlScripts.GetKeysSql, dbConn);
@@ -141,8 +141,8 @@ public sealed class SqlServerInfoService : ISqlServerInfoService
     }
 
     private static async Task<(SqlCommand indexCmd, SqlDataReader indexReader)> PopulateIndexes(
-        SqlConnection dbConn, 
-        string tableName, 
+        SqlConnection dbConn,
+        string tableName,
         List<IndexInfo> indexes)
     {
         await using var indexCmd = new SqlCommand(SqlServerInfoServiceSqlScripts.GetIndexesSql, dbConn);
