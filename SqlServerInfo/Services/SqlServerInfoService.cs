@@ -49,7 +49,9 @@ public sealed class SqlServerInfoService : ISqlServerInfoService
         return databases;
     }
 
-    public async IAsyncEnumerable<DatabaseInfo> GetDatabasesAsyncEnumerable(string connectionString, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+    public async IAsyncEnumerable<DatabaseInfo> GetDatabasesAsyncEnumerable(
+        string connectionString, 
+        [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         if (cancellationToken.IsCancellationRequested)
         {
@@ -102,7 +104,10 @@ public sealed class SqlServerInfoService : ISqlServerInfoService
         return (tables, dbConn);
     }
 
-    private static async Task PopulateTable(SqlConnection dbConn, string tableName, List<ColumnInfo> columns)
+    private static async Task PopulateTable(
+        SqlConnection dbConn, 
+        string tableName, 
+        List<ColumnInfo> columns)
     {
         await using var cmd = new SqlCommand(SqlServerInfoServiceSqlScripts.GetColumnsSql, dbConn);
         cmd.Parameters.AddWithValue("@tableName", tableName);
@@ -117,7 +122,10 @@ public sealed class SqlServerInfoService : ISqlServerInfoService
         }
     }
 
-    private static async Task PopulateKeys(SqlConnection dbConn, string tableName, List<KeyInfo> keys)
+    private static async Task PopulateKeys(
+        SqlConnection dbConn, 
+        string tableName, 
+        List<KeyInfo> keys)
     {
         await using var keyCmd = new SqlCommand(SqlServerInfoServiceSqlScripts.GetKeysSql, dbConn);
         keyCmd.Parameters.AddWithValue("@tableName", tableName);
@@ -132,7 +140,10 @@ public sealed class SqlServerInfoService : ISqlServerInfoService
         }
     }
 
-    private static async Task<(SqlCommand indexCmd, SqlDataReader indexReader)> PopulateIndexes(SqlConnection dbConn, string tableName, List<IndexInfo> indexes)
+    private static async Task<(SqlCommand indexCmd, SqlDataReader indexReader)> PopulateIndexes(
+        SqlConnection dbConn, 
+        string tableName, 
+        List<IndexInfo> indexes)
     {
         await using var indexCmd = new SqlCommand(SqlServerInfoServiceSqlScripts.GetIndexesSql, dbConn);
         indexCmd.Parameters.AddWithValue("@tableName", tableName);

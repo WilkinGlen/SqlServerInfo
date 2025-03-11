@@ -1,6 +1,9 @@
 namespace SqlServerInfo.Models;
 
-public sealed class ColumnInfo(string name, string dataType, object maxLength)
+public sealed class ColumnInfo(
+    string name, 
+    string dataType, 
+    object maxLength)
 {
     public string Name { get; set; } = name;
 

@@ -1,6 +1,11 @@
 namespace SqlServerInfo.Models;
 
-public sealed class TableInfo(string schema, string name, List<ColumnInfo> columns, List<KeyInfo> keys, List<IndexInfo> indexes)
+public sealed class TableInfo(
+    string schema,
+    string name,
+    List<ColumnInfo> columns,
+    List<KeyInfo> keys,
+    List<IndexInfo> indexes)
 {
     public string Schema { get; set; } = schema;
 

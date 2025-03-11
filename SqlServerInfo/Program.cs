@@ -8,7 +8,7 @@ var cancelProvider = new CancellationTokenSource();
 await foreach (var db in sqlServerInfoService.GetDatabasesAsyncEnumerable(connectionString, cancelProvider.Token))
 {
     Console.WriteLine(db.Name);
-    cancelProvider.Cancel();
+    //cancelProvider.Cancel();
 }
 
 Console.WriteLine("Done");
