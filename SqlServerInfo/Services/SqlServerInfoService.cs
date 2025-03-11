@@ -8,8 +8,19 @@ using System.Runtime.CompilerServices;
 
 public interface ISqlServerInfoService
 {
+    /// <summary>
+    /// Retrieves information about all user databases from the SQL Server instance.
+    /// </summary>
+    /// <param name="connectionString">The connection string to the SQL Server instance.</param>
+    /// <returns>A collection of DatabaseInfo objects containing database metadata.</returns>
     Task<IEnumerable<DatabaseInfo>> GetDatabasesAsync(string connectionString);
 
+    /// <summary>
+    /// Asynchronously enumerates information about all user databases from the SQL Server instance.
+    /// </summary>
+    /// <param name="connectionString">The connection string to the SQL Server instance.</param>
+    /// <param name="cancellationToken">A token to cancel the operation.</param>
+    /// <returns>An async enumerable of DatabaseInfo objects containing database metadata.</returns>
     IAsyncEnumerable<DatabaseInfo> GetDatabasesAsyncEnumerable(string connectionString, CancellationToken cancellationToken = default);
 }
 
