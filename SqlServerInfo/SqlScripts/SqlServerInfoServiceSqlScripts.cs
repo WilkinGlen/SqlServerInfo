@@ -1,6 +1,6 @@
 ﻿namespace SqlServerInfo.SqlScripts;
 
-public static class SqlServerInfoSqlScripts
+public static class SqlServerInfoServiceSqlScripts
 {
     public const string GetColumnsSql =
         @"SELECT COLUMN_NAME, DATA_TYPE, CHARACTER_MAXIMUM_LENGTH 
