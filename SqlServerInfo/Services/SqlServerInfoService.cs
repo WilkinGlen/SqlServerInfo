@@ -51,7 +51,7 @@ public sealed class SqlServerInfoService : ISqlServerInfoService
 
         foreach (DataRow dbRow in dbSchema.Rows)
         {
-            if(cancellationToken.IsCancellationRequested)
+            if (cancellationToken.IsCancellationRequested)
             {
                 yield break;
             }
