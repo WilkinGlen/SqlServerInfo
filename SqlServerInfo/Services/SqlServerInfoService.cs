@@ -4,10 +4,13 @@ using Microsoft.Data.SqlClient;
 using SqlServerInfo.Models;
 using SqlServerInfo.SqlScripts;
 using System.Data;
+using System.Runtime.CompilerServices;
 
 public interface ISqlServerInfoService
 {
     Task<IEnumerable<DatabaseInfo>> GetDatabasesAsync(string connectionString);
+
+    IAsyncEnumerable<DatabaseInfo> GetDatabasesAsyncEnumerable(string connectionString, CancellationToken cancellationToken = default);
 }
 
 public sealed class SqlServerInfoService : ISqlServerInfoService
@@ -33,6 +36,35 @@ public sealed class SqlServerInfoService : ISqlServerInfoService
         }
 
         return databases;
+    }
+
+    public async IAsyncEnumerable<DatabaseInfo> GetDatabasesAsyncEnumerable(string connectionString, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+    {
+        if (cancellationToken.IsCancellationRequested)
+        {
+            yield break;
+        }
+
+        await using var conn = new SqlConnection(connectionString);
+        await conn.OpenAsync(cancellationToken);
+        var dbSchema = await conn.GetSchemaAsync("Databases", cancellationToken);
+
+        foreach (DataRow dbRow in dbSchema.Rows)
+        {
+            if(cancellationToken.IsCancellationRequested)
+            {
+                yield break;
+            }
+
+            var databaseName = dbRow["database_name"].ToString()!;
+            if (databaseName is "master" or "tempdb" or "model" or "msdb")
+            {
+                continue;
+            }
+
+            var (tables, _) = await PopulateTables(connectionString, databaseName);
+            yield return new DatabaseInfo(databaseName, tables);
+        }
     }
 
     private static async Task<(List<TableInfo> tables, SqlConnection dbConn)> PopulateTables(string connectionString, string databaseName)
