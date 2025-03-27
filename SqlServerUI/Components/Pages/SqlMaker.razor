@@ -1,0 +1,63 @@
+﻿@page "/SqlMaker"
+
+@using SqlServerInfo.Models
+
+<PageTitle>Sql Maker</PageTitle>
+
+<MudStack Row>
+    <MudText Typo="Typo.h6">Database: @this.selectedDatabase?.Name</MudText>
+    <MudButton Variant="Variant.Outlined" Size="Size.Small" OnClick="@this.GenerateSql">Generate</MudButton>
+</MudStack>
+<MudTreeView T="@TableInfo" Dense="true">
+    @if (this.selectedDatabase?.Tables != null)
+    {
+        foreach (var table in this.selectedDatabase.Tables)
+        {
+            <MudTreeViewItem Text="@table.Name" Value="@table">
+                <MudTreeView T="ColumnInfo" SelectionMode="SelectionMode.MultiSelection">
+                    @foreach (var column in table.Columns)
+                    {
+                        <MudTreeViewItem Text="@column.Name" Value="@column" @bind-Selected="@column.Selected" />
+                    }
+                </MudTreeView>
+                @if (table.TablesWithForeignKeysToMe.Count > 0)
+                {
+                    <MudTreeViewItem Text="Tables with foreign keys that point to me">
+                        <MudTreeView T="TableInfo">
+                            @foreach (var fTable in table.TablesWithForeignKeysToMe)
+                            {
+                                <MudTreeViewItem Text="@fTable.Name" Value="@table">
+                                    <MudTreeView T="ColumnInfo" SelectionMode="SelectionMode.MultiSelection">
+                                        @foreach (var column in fTable.Columns)
+                                        {
+                                            <MudTreeViewItem Text="@column.Name" Value="@column" @bind-Selected="@column.Selected" />
+                                        }
+                            </MudTreeView>
+                        </MudTreeViewItem>
+                            }
+                        </MudTreeView>
+                    </MudTreeViewItem>
+                }
+                @if (table.TablesWithPrimaryKeysFromMe.Count > 0)
+                {
+                    <MudTreeViewItem Text="Tables with primary keys I point to">
+                        <MudTreeView T="TableInfo">
+                            @foreach (var pTable in table.TablesWithPrimaryKeysFromMe)
+                            {
+                                <MudTreeViewItem Text="@pTable.Name" Value="@table">
+                                    <MudTreeView T="ColumnInfo" SelectionMode="SelectionMode.MultiSelection">
+                                        @foreach (var column in pTable.Columns)
+                                        {
+                                            <MudTreeViewItem Text="@column.Name" Value="@column" @bind-Selected="@column.Selected" />
+                                        }
+                            </MudTreeView>
+                        </MudTreeViewItem>
+                            }
+                        </MudTreeView>
+                    </MudTreeViewItem>
+                }
+            </MudTreeViewItem>
+        }
+
+    }
+</MudTreeView>

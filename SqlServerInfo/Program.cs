@@ -2,7 +2,7 @@
 
 var connectionString = "Server=localhost;Integrated Security=True;TrustServerCertificate=True;";
 var cancelProvider = new CancellationTokenSource();
-ISqlServerInfoService sqlServerInfoService = new SqlServerInfoService();
+var sqlServerInfoService = new SqlServerInfoService();
 
 var _ = await sqlServerInfoService.GetDatabasesAsync(connectionString);
 

@@ -22,6 +22,8 @@ public interface ISqlServerInfoService
     /// <param name="cancellationToken">A token to cancel the operation.</param>
     /// <returns>An async enumerable of DatabaseInfo objects containing database metadata.</returns>
     IAsyncEnumerable<DatabaseInfo> GetDatabasesAsyncEnumerable(string connectionString, CancellationToken cancellationToken = default);
+
+    void PopulateDatabaseForeignAndPrimaryTables(DatabaseInfo databaseInfo);
 }
 
 public sealed class SqlServerInfoService : ISqlServerInfoService
@@ -80,6 +82,17 @@ public sealed class SqlServerInfoService : ISqlServerInfoService
         }
     }
 
+    public void PopulateDatabaseForeignAndPrimaryTables(DatabaseInfo databaseInfo)
+    {
+        foreach(var table in databaseInfo.Tables)
+        {
+            table.TablesWithForeignKeysToMe = 
+                [.. databaseInfo.Tables.Where(x => x.Keys.Any(k => k.ReferencedTable == table.Name))];
+            table.TablesWithPrimaryKeysFromMe =
+                [.. databaseInfo.Tables.Where(primaryTable => table.Keys.Any(k => k.ReferencedTable == primaryTable.Name))];
+        }
+    }
+
     private static async Task<(List<TableInfo> tables, SqlConnection dbConn)> PopulateTables(string connectionString, string databaseName)
     {
         var tables = new List<TableInfo>();
@@ -133,9 +146,11 @@ public sealed class SqlServerInfoService : ISqlServerInfoService
         while (await keyReader.ReadAsync())
         {
             keys.Add(new KeyInfo(
-                keyReader["CONSTRAINT_NAME"].ToString()!,
-                keyReader["CONSTRAINT_TYPE"].ToString()!,
-                keyReader["COLUMN_NAME"].ToString()!
+                keyReader["Name"].ToString()!,
+                keyReader["Type"].ToString()!,
+                keyReader["ColumnName"].ToString()!,
+                keyReader["ReferencedTable"].ToString()!,
+                keyReader["ReferencedColumn"].ToString()!
             ));
         }
     }

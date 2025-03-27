@@ -16,4 +16,8 @@ public sealed class TableInfo(
     public List<KeyInfo> Keys { get; set; } = keys;
 
     public List<IndexInfo> Indexes { get; set; } = indexes;
+
+    public List<TableInfo> TablesWithForeignKeysToMe { get; set; } = [];
+
+    public List<TableInfo> TablesWithPrimaryKeysFromMe { get; set; } = [];
 }

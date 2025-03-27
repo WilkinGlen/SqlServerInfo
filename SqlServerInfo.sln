@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35825.156 d17.13
+VisualStudioVersion = 17.13.35825.156
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlServerInfo", "SqlServerInfo\SqlServerInfo.csproj", "{6465D984-D2B7-4BF3-A336-FE7C20C1CACE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlServerUI", "SqlServerUI\SqlServerUI.csproj", "{3ED2EEF2-F823-4526-955C-72C01DA4D9B6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{6465D984-D2B7-4BF3-A336-FE7C20C1CACE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6465D984-D2B7-4BF3-A336-FE7C20C1CACE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6465D984-D2B7-4BF3-A336-FE7C20C1CACE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3ED2EEF2-F823-4526-955C-72C01DA4D9B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3ED2EEF2-F823-4526-955C-72C01DA4D9B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3ED2EEF2-F823-4526-955C-72C01DA4D9B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3ED2EEF2-F823-4526-955C-72C01DA4D9B6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,61 @@
+﻿@using SqlServerInfo.Models
+@using SqlServerUI.Models
+
+@page "/"
+
+<PageTitle>Home</PageTitle>
+
+<a href="SqlMaker">SqlMaker</a>
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            @if (this.databases != null)
+            {
+                <select onchange="@this.DatabaseSelected">
+                    @foreach (var db in this.databases)
+                    {
+                        <option value="@db.Name">@db.Name</option>
+                    }
+                </select>
+            }
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <MudStack Row>
+                @if (this.selectedDatabase != null)
+                {
+                    <MudList T="@TableInfo" SelectionMode="SelectionMode.SingleSelection" SelectedValueChanged="@this.TableSelected" ReadOnly="false" Dense="true">
+                        <MudListSubheader>
+                            Tables
+                        </MudListSubheader>
+                        @foreach (var table in this.selectedDatabase.Tables)
+                        {
+                            <MudListItem Text="@table.Name" Value="@table" />
+                        }
+                    </MudList>
+                }
+                @if (this.selectedTable != null)
+                {
+                    <MudDropContainer T="DropItem" Items="@this.droppableItems" ItemsSelector="@((item,dropzone) => item.Identifier == dropzone)" ItemDropped="ItemUpdated" Class="d-flex flex-wrap flex-grow-1">
+                        <ChildContent>
+                            <MudDropZone T="DropItem" Identifier="Drop Zone 1" ItemDraggingClass="mud-info-text" Class="rounded mud-background-gray pa-2 ma-4 flex-grow-1">
+                                <MudText Typo="Typo.h6" Class="mb-4">Available Colmuns</MudText>
+                            </MudDropZone>
+                            <MudDropZone T="DropItem" Identifier="Drop Zone 2" ItemDraggingClass="mud-error-text" Class="rounded mud-background-gray pa-2 ma-4 flex-grow-1">
+                                <MudText Typo="Typo.h6" Class="mb-4">Selected Columns</MudText>
+                            </MudDropZone>
+                        </ChildContent>
+                        <ItemRenderer>
+                            <div Class="rounded mud-paper-outlined d-flex align-center pa-2 ma-1">
+                                <MudIcon Icon="@Icons.Material.Outlined.InsertChart" Color="Color.Inherit" Class="mr-2" />
+                                @context.Name
+                            </div>
+                        </ItemRenderer>
+                    </MudDropContainer>
+                }
+            </MudStack>
+        </div>
+    </div>
+</div>

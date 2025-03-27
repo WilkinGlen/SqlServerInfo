@@ -10,4 +10,6 @@ public sealed class ColumnInfo(
     public string DataType { get; set; } = dataType;
 
     public int? MaxLength { get; set; } = maxLength as int?;
+
+    public bool Selected { get; set; }
 }
