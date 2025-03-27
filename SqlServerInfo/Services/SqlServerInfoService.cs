@@ -84,9 +84,9 @@ public sealed class SqlServerInfoService : ISqlServerInfoService
 
     public void PopulateDatabaseForeignAndPrimaryTables(DatabaseInfo databaseInfo)
     {
-        foreach(var table in databaseInfo.Tables)
+        foreach (var table in databaseInfo.Tables)
         {
-            table.TablesWithForeignKeysToMe = 
+            table.TablesWithForeignKeysToMe =
                 [.. databaseInfo.Tables.Where(x => x.Keys.Any(k => k.ReferencedTable == table.Name))];
             table.TablesWithPrimaryKeysFromMe =
                 [.. databaseInfo.Tables.Where(primaryTable => table.Keys.Any(k => k.ReferencedTable == primaryTable.Name))];
@@ -106,6 +106,11 @@ public sealed class SqlServerInfoService : ISqlServerInfoService
             var columns = new List<ColumnInfo>();
             var keys = new List<KeyInfo>();
             var indexes = new List<IndexInfo>();
+
+            if(tableName is "sysdiagrams")
+            {
+                continue;
+            }
 
             await PopulateTable(dbConn, tableName, columns);
             await PopulateKeys(dbConn, tableName, keys);

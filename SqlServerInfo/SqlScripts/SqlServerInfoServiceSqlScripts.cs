@@ -3,12 +3,12 @@
 public static class SqlServerInfoServiceSqlScripts
 {
     public const string GetColumnsSql =
-        @"SELECT COLUMN_NAME, DATA_TYPE, CHARACTER_MAXIMUM_LENGTH 
-          FROM INFORMATION_SCHEMA.COLUMNS 
+        @"SELECT COLUMN_NAME, DATA_TYPE, CHARACTER_MAXIMUM_LENGTH
+          FROM INFORMATION_SCHEMA.COLUMNS
           WHERE TABLE_NAME = @tableName";
 
     public const string GetKeysSql =
-        @"SELECT 
+        @"SELECT
               fk.name AS [Name],
           	'FOREIGN KEY' AS [Type],
               tp.name AS ParentTable,

@@ -12,14 +12,14 @@ public sealed partial class Home
     private DatabaseInfo? selectedDatabase;
     private TableInfo? selectedTable;
 
-    private List<DropItem> droppableItems = [];
+    private readonly List<DropItem> droppableItems = [];
 
     [Inject]
     private ISqlServerInfoService? SqlServerInfoService { get; set; }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if(firstRender)
+        if (firstRender)
         {
             this.databases = [.. await this.SqlServerInfoService!.GetDatabasesAsync(
                 "Server=localhost;Integrated Security=True;TrustServerCertificate=True;")];
@@ -52,9 +52,9 @@ public sealed partial class Home
         this.droppableItems.AddRange(foreignKeyColumns);
 
         List<DropItem> primaryDropItems = [];
-        foreach(var table in this.selectedDatabase?.Tables!.Where(x => x.Name != tableInfo.Name)!)
+        foreach (var table in this.selectedDatabase?.Tables!.Where(x => x.Name != tableInfo.Name)!)
         {
-            if(table.Keys.Any(x => x.ReferencedTable == tableInfo.Name))
+            if (table.Keys.Any(x => x.ReferencedTable == tableInfo.Name))
             {
                 primaryDropItems.AddRange(
                     table.Columns.Select(x => new DropItem

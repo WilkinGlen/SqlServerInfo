@@ -27,6 +27,6 @@ public sealed partial class SqlMaker
 
     private void GenerateSql()
     {
-        
+
     }
 }
