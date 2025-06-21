@@ -5,28 +5,77 @@
 <PageTitle>Home</PageTitle>
 
 <MudText Typo="Typo.h6">Server: @this.serverInfo?.ServerName</MudText>
-
-<MudStack Row>
-    <MudExpansionPanels>
-        @if (this.serverInfo?.Databases?.Count > 0)
-        {
-            foreach (var database in this.serverInfo?.Databases!)
-            {
-                <MudExpansionPanel Text="@database.Name" Icon="@Icons.Material.Filled.Storage">
-                    <MudList T="TableInfo" SelectionMode="@SelectionMode.SingleSelection" SelectedValueChanged="@this.SelectedTableChanged">
-                        <MudListSubheader>
-                            <MudText Typo="Typo.h6">Tables</MudText>
-                        </MudListSubheader>
-                        @foreach (var table in database.Tables)
-                        {
-                            <MudListItem Value="@table" Text="@table.Name" />
-                        }
-                    </MudList>
-                </MudExpansionPanel>
-            }
-        }
-    </MudExpansionPanels>
+<MudStack>
     <MudStack Row>
-        
+        <MudExpansionPanels>
+            @if (this.serverInfo?.Databases?.Count > 0)
+            {
+                foreach (var database in this.serverInfo?.Databases!)
+                {
+                    <MudExpansionPanel Text="@database.Name" Icon="@Icons.Material.Filled.Storage">
+                        <MudList T="TableInfo" SelectionMode="@SelectionMode.SingleSelection" SelectedValueChanged="@this.SelectedTableChanged">
+                            <MudListSubheader>
+                                <MudText Typo="Typo.h6">Tables</MudText>
+                            </MudListSubheader>
+                            @foreach (var table in database.Tables)
+                            {
+                                <MudListItem Value="@table" Text="@table.Name" />
+                            }
+                        </MudList>
+                    </MudExpansionPanel>
+                }
+            }
+        </MudExpansionPanels>
+        <MudStack Row>
+            @if (this.selectedTable != null)
+            {
+                <MudStack>
+                    <MudText Typo="Typo.h6">@this.selectedTable.Name</MudText>
+                    <MudTable T="ColumnInfo" Items="@this.selectedTable.Columns" Dense="true">
+                        <HeaderContent>
+                            <MudTh>Column Name</MudTh>
+                            <MudTh>Data Type</MudTh>
+                            <MudTh>Is Nullable</MudTh>
+                            <MudTh>Select</MudTh>
+                        </HeaderContent>
+                        <RowTemplate>
+                            <MudTd DataLabel="Column Name">@context.Name</MudTd>
+                            <MudTd DataLabel="Data Type">@context.DataType</MudTd>
+                            <MudTd DataLabel="Is Nullable">@context.IsNullable.ToString()</MudTd>
+                            <MudIconButton Icon="@Icons.Material.Filled.Add" aria-label="add" @onclick="@(() => this.AddColumn(context))" />
+                        </RowTemplate>
+                    </MudTable>
+                </MudStack>
+            }
+            @if (this.selectedColumns?.Any() == true)
+            {
+                <MudStack>
+                    <MudText Typo="Typo.h6">Selected Tables</MudText>
+                    <MudTable T="ColumnInfo" Items="@this.selectedColumns" Dense="true">
+                        <HeaderContent>
+                            <MudTh>Table</MudTh>
+                            <MudTh>Column</MudTh>
+                            <MudTh>Data Type</MudTh>
+                            <MudTh>Is Nullable</MudTh>
+                            <MudTh>Select</MudTh>
+                        </HeaderContent>
+                        <RowTemplate>
+                            @{
+                                var tableName = this.serverInfo?.Databases
+                                .SelectMany(db => db.Tables)
+                                .FirstOrDefault(t => t.Columns.Contains(context))?.Name ?? "Unknown";
+                            }
+                            <MudTd DataLabel="Table Name">@tableName</MudTd>
+                            <MudTd DataLabel="Column Name">@context.Name</MudTd>
+                            <MudTd DataLabel="Data Type">@context.DataType</MudTd>
+                            <MudTd DataLabel="Is Nullable">@context.IsNullable.ToString()</MudTd>
+                            <MudIconButton Icon="@Icons.Material.Filled.Delete" aria-label="delete" @onclick="@(() => this.RemoveColumn(context))" />
+                        </RowTemplate>
+                    </MudTable>
+                </MudStack>
+            }
+        </MudStack>
+        <MudList T="ColumnInfo"></MudList>
     </MudStack>
+    <MudText>@this.generatedSql</MudText>
 </MudStack>

@@ -1,5 +1,6 @@
 ﻿namespace SqlServerUI.Components.Pages;
 
+using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
 using SqlServerInterrogator.Models;
 
@@ -8,6 +9,9 @@ public sealed partial class Home
     private const string ServerConnectionString = "Server=localhost;Integrated Security=True;TrustServerCertificate=True;MultipleActiveResultSets=True;";
 
     private ServerInfo? serverInfo;
+    private TableInfo? selectedTable;
+    private readonly List<ColumnInfo> selectedColumns = [];
+    private string generatedSql = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
@@ -32,9 +36,36 @@ public sealed partial class Home
         }
     }
 
-    private void SelectedTableChanged(TableInfo tableInfo)
+    private void SelectedTableChanged(TableInfo tableInfo) => this.selectedTable = tableInfo;
+
+    private void AddColumn(ColumnInfo columnInfo)
     {
-        
+        if (!this.selectedColumns.Contains(columnInfo))
+        {
+            this.selectedColumns.Add(columnInfo);
+            if(this.selectedColumns.Count > 0)
+            {
+                var firstColumn = this.selectedColumns[0];
+                var database = this.serverInfo?.Databases.Single(d => d.Name == firstColumn.DatabaseName);
+                if (database is not null)
+                {
+                    this.generatedSql = SqlServerInterrogator.Services.SqlGenerator
+                        .GenerateSelectStatement(this.selectedColumns, database);
+                }
+            }
+            else
+            {
+                this.generatedSql = string.Empty;
+            }            
+        }
+    }
+
+    private void RemoveColumn(ColumnInfo columnInfo)
+    {
+        if (this.selectedColumns.Contains(columnInfo))
+        {
+            _ = this.selectedColumns.Remove(columnInfo);
+        }
     }
 }
 
