@@ -23,6 +23,14 @@ public interface ISqlServerInfoService
     /// <returns>An async enumerable of DatabaseInfo objects containing database metadata.</returns>
     IAsyncEnumerable<DatabaseInfo> GetDatabasesAsyncEnumerable(string connectionString, CancellationToken cancellationToken = default);
 
+    /// <summary>
+    /// Populates the database with foreign and primary key tables based on the provided database information.
+    /// </summary>
+    /// <remarks>This method creates tables in the database that represent foreign and primary key
+    /// relationships. Ensure that the <paramref name="databaseInfo"/> object contains valid and complete information
+    /// about the database schema before calling this method.</remarks>
+    /// <param name="databaseInfo">The <see cref="DatabaseInfo"/> object containing metadata about the database structure. This parameter must not
+    /// be <see langword="null"/>.</param>
     void PopulateDatabaseForeignAndPrimaryTables(DatabaseInfo databaseInfo);
 }
 

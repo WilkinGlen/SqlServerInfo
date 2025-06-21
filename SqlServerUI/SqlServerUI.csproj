@@ -11,10 +11,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SqlServerInfo\SqlServerInfo.csproj" />
+    <ProjectReference Include="..\..\SqlServerInterrogator\SqlServerInterrogator\SqlServerInterrogator.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Models\" />
     <Folder Include="Services\" />
   </ItemGroup>
 

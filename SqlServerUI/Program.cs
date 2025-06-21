@@ -1,5 +1,4 @@
 using MudBlazor.Services;
-using SqlServerInfo.Services;
 using SqlServerUI.Components;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,8 +8,6 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 builder.Services.AddMudServices();
-
-builder.Services.AddScoped<ISqlServerInfoService, SqlServerInfoService>();
 
 var app = builder.Build();
 
