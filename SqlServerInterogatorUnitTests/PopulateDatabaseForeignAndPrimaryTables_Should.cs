@@ -176,4 +176,105 @@ public class PopulateDatabaseForeignAndPrimaryTables_Should
             }
         }
     }
+
+    [Fact]
+    public void PopulateTablesICanJoinTo_ShouldNotIncludeSelf_WhenTableHasSelfReference()
+    {
+        var databaseInfo = new DatabaseInfo
+        {
+            Name = "TestDatabase",
+            Tables =
+            [
+                new TableInfo { Name = "Table1", SchemaName = "dbo", TableId = 1 }
+            ]
+        };
+        databaseInfo.Tables[0].Keys.Add(new KeyInfo
+        {
+            IsForeignKey = true,
+            ReferencedTableName = "Table1"
+        });
+
+        DatabaseInterrogator.PopulateDatabaseForeignAndPrimaryTables(databaseInfo);
+
+        _ = databaseInfo.Tables[0].TablesICanJoinTo.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void PopulateTablesICanJoinTo_ShouldHandleCircularReferences()
+    {
+        var databaseInfo = new DatabaseInfo
+        {
+            Name = "TestDatabase",
+            Tables =
+            [
+                new TableInfo { Name = "A", SchemaName = "dbo", TableId = 1 },
+                new TableInfo { Name = "B", SchemaName = "dbo", TableId = 2 },
+                new TableInfo { Name = "C", SchemaName = "dbo", TableId = 3 }
+            ]
+        };
+        databaseInfo.Tables[0].Keys.Add(new KeyInfo { IsForeignKey = true, ReferencedTableName = "B" }); // A → B
+        databaseInfo.Tables[1].Keys.Add(new KeyInfo { IsForeignKey = true, ReferencedTableName = "C" }); // B → C
+        databaseInfo.Tables[2].Keys.Add(new KeyInfo { IsForeignKey = true, ReferencedTableName = "A" }); // C → A
+
+        DatabaseInterrogator.PopulateDatabaseForeignAndPrimaryTables(databaseInfo);
+
+        foreach (var table in databaseInfo.Tables)
+        {
+            _ = table.TablesICanJoinTo.Should().HaveCount(2);
+        }
+    }
+
+    [Fact]
+    public void PopulateTablesICanJoinTo_ShouldNotDuplicate_WhenMultipleForeignKeysExist()
+    {
+        var databaseInfo = new DatabaseInfo
+        {
+            Name = "TestDatabase",
+            Tables =
+            [
+                new TableInfo { Name = "Parent", SchemaName = "dbo", TableId = 1 },
+                new TableInfo { Name = "Child", SchemaName = "dbo", TableId = 2 }
+            ]
+        };
+        databaseInfo.Tables[1].Keys.Add(new KeyInfo { IsForeignKey = true, ReferencedTableName = "Parent" });
+        databaseInfo.Tables[1].Keys.Add(new KeyInfo { IsForeignKey = true, ReferencedTableName = "Parent" });
+
+        DatabaseInterrogator.PopulateDatabaseForeignAndPrimaryTables(databaseInfo);
+
+        _ = databaseInfo.Tables[1].TablesICanJoinTo.Should().ContainSingle(t => t.Name == "Parent");
+    }
+
+    [Fact]
+    public void PopulateTablesICanJoinTo_ShouldNotJoinDisconnectedTables()
+    {
+        var databaseInfo = new DatabaseInfo
+        {
+            Name = "TestDatabase",
+            Tables =
+            [
+                new TableInfo { Name = "A", SchemaName = "dbo", TableId = 1 },
+                new TableInfo { Name = "B", SchemaName = "dbo", TableId = 2 },
+                new TableInfo { Name = "C", SchemaName = "dbo", TableId = 3 },
+                new TableInfo { Name = "D", SchemaName = "dbo", TableId = 4 }
+            ]
+        };
+        databaseInfo.Tables[0].Keys.Add(new KeyInfo { IsForeignKey = true, ReferencedTableName = "B" }); // A → B
+        databaseInfo.Tables[2].Keys.Add(new KeyInfo { IsForeignKey = true, ReferencedTableName = "D" }); // C → D
+
+        DatabaseInterrogator.PopulateDatabaseForeignAndPrimaryTables(databaseInfo);
+
+        _ = databaseInfo.Tables[0].TablesICanJoinTo.Should().ContainSingle(t => t.Name == "B");
+        _ = databaseInfo.Tables[2].TablesICanJoinTo.Should().ContainSingle(t => t.Name == "D");
+        _ = databaseInfo.Tables[0].TablesICanJoinTo.Should().NotContain(t => t.Name == "C" || t.Name == "D");
+    }
+
+    [Fact]
+    public void PopulateTablesICanJoinTo_ShouldHandleEmptyTableList()
+    {
+        var databaseInfo = new DatabaseInfo { Name = "TestDatabase", Tables = [] };
+
+        DatabaseInterrogator.PopulateDatabaseForeignAndPrimaryTables(databaseInfo);
+
+        _ = databaseInfo.Tables.Should().BeEmpty();
+    }
 }
