@@ -2,6 +2,7 @@
 
 using MudBlazor;
 using SqlServerInterrogator.Models;
+using SqlServerInterrogator.Services;
 
 public sealed partial class Home
 {
@@ -16,15 +17,7 @@ public sealed partial class Home
     {
         try
         {
-            this.serverInfo = await SqlServerInterrogator.Services.ServerInterrogator.GetServerInfoAsync(ServerConnectionString);
-            this.serverInfo.Databases = await SqlServerInterrogator.Services.ServerInterrogator.GetDatabasesAsync(ServerConnectionString);
-            foreach (var database in this.serverInfo.Databases)
-            {
-                database.Tables = await SqlServerInterrogator.Services.DatabaseInterrogator.GetTableInfoAsync(
-                    ServerConnectionString,
-                    database.Name!);
-                SqlServerInterrogator.Services.DatabaseInterrogator.PopulateDatabaseForeignAndPrimaryTables(database);
-            }
+            this.serverInfo = await ServerInterrogator.GetFullServerInfoAsync(ServerConnectionString);
         }
         catch (Exception ex)
         {
@@ -55,8 +48,7 @@ public sealed partial class Home
                 var database = this.serverInfo?.Databases.Single(d => d.Name == firstColumn.DatabaseName);
                 if (database is not null)
                 {
-                    this.generatedSql = SqlServerInterrogator.Services.SqlGenerator
-                        .GenerateSelectStatement(this.selectedColumns, database);
+                    this.generatedSql = SqlGenerator.GenerateSelectStatement(this.selectedColumns, database);
                 }
             }
             else
