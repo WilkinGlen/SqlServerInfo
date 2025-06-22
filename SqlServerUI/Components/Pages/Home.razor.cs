@@ -23,9 +23,6 @@ public sealed partial class Home
                 database.Tables = await SqlServerInterrogator.Services.DatabaseInterrogator.GetTableInfoAsync(
                     ServerConnectionString,
                     database.Name!);
-                database.StoredProcedures = await SqlServerInterrogator.Services.DatabaseInterrogator.GetStoredProcedureInfoAsync(
-                    ServerConnectionString,
-                    database.Name!);
                 SqlServerInterrogator.Services.DatabaseInterrogator.PopulateDatabaseForeignAndPrimaryTables(database);
             }
         }
