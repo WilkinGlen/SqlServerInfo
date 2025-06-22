@@ -35,6 +35,13 @@ public sealed partial class Home
         }
     }
 
+    private void SelectedDatabaseChanged(bool newVal)
+    {
+        this.selectedColumns.Clear();
+        this.selectedTable = null;
+        this.generatedSql = string.Empty;
+    }
+
     private void SelectedTableChanged(TableInfo tableInfo)
     {
         this.selectedTable = tableInfo;

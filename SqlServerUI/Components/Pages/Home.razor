@@ -12,7 +12,7 @@
             {
                 foreach (var database in this.serverInfo?.Databases!)
                 {
-                    <MudExpansionPanel Text="@database.Name" Icon="@Icons.Material.Filled.Storage">
+                    <MudExpansionPanel Text="@database.Name" Icon="@Icons.Material.Filled.Storage" ExpandedChanged="@this.SelectedDatabaseChanged">
                         <MudList T="TableInfo" SelectionMode="@SelectionMode.SingleSelection" SelectedValueChanged="@this.SelectedTableChanged">
                             <MudListSubheader>
                                 <MudText Typo="Typo.h6">Tables</MudText>
