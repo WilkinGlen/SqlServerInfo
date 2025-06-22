@@ -115,7 +115,7 @@ public sealed class SqlServerInfoService : ISqlServerInfoService
             var keys = new List<KeyInfo>();
             var indexes = new List<IndexInfo>();
 
-            if(tableName is "sysdiagrams")
+            if (tableName is "sysdiagrams")
             {
                 continue;
             }

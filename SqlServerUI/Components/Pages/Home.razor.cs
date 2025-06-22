@@ -1,6 +1,5 @@
 ﻿namespace SqlServerUI.Components.Pages;
 
-using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
 using SqlServerInterrogator.Models;
 
@@ -17,9 +16,9 @@ public sealed partial class Home
     {
         try
         {
-            serverInfo = await SqlServerInterrogator.Services.ServerInterrogator.GetServerInfoAsync(ServerConnectionString);
-            serverInfo.Databases = await SqlServerInterrogator.Services.ServerInterrogator.GetDatabasesAsync(ServerConnectionString);
-            foreach (var database in serverInfo.Databases)
+            this.serverInfo = await SqlServerInterrogator.Services.ServerInterrogator.GetServerInfoAsync(ServerConnectionString);
+            this.serverInfo.Databases = await SqlServerInterrogator.Services.ServerInterrogator.GetDatabasesAsync(ServerConnectionString);
+            foreach (var database in this.serverInfo.Databases)
             {
                 database.Tables = await SqlServerInterrogator.Services.DatabaseInterrogator.GetTableInfoAsync(
                     ServerConnectionString,
@@ -36,14 +35,17 @@ public sealed partial class Home
         }
     }
 
-    private void SelectedTableChanged(TableInfo tableInfo) => this.selectedTable = tableInfo;
+    private void SelectedTableChanged(TableInfo tableInfo)
+    {
+        this.selectedTable = tableInfo;
+    }
 
     private void AddColumn(ColumnInfo columnInfo)
     {
         if (!this.selectedColumns.Contains(columnInfo))
         {
             this.selectedColumns.Add(columnInfo);
-            if(this.selectedColumns.Count > 0)
+            if (this.selectedColumns.Count > 0)
             {
                 var firstColumn = this.selectedColumns[0];
                 var database = this.serverInfo?.Databases.Single(d => d.Name == firstColumn.DatabaseName);
@@ -56,18 +58,18 @@ public sealed partial class Home
             else
             {
                 this.generatedSql = string.Empty;
-            }            
+            }
         }
     }
 
     private List<TableInfo> GetJoinableTables(DatabaseInfo databaseInfo)
     {
-        if (selectedColumns == null || selectedColumns.Count == 0)
+        if (this.selectedColumns == null || this.selectedColumns.Count == 0)
         {
             return databaseInfo.Tables;
         }
 
-        var selectedTableIds = selectedColumns.Select(c => c.TableId).ToHashSet();
+        var selectedTableIds = this.selectedColumns.Select(c => c.TableId).ToHashSet();
         var selectedTables = databaseInfo.Tables.Where(t => selectedTableIds.Contains(t.TableId)).ToList();
         var joinableTables = selectedTables
             .SelectMany(t => t.TablesICanJoinTo)
