@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlServerUI", "SqlServerUI\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlServerInterrogator", "..\SqlServerInterrogator\SqlServerInterrogator\SqlServerInterrogator.csproj", "{381CEE53-2813-4478-443F-C143522667C3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlGeneratorUnitTest", "..\SqlServerInterrogator\SqlGeneratorUnitTest\SqlGeneratorUnitTest.csproj", "{604FAB03-DEFA-A677-491F-72A1F1644786}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlServerInterogatorUnitTests", "SqlServerInterogatorUnitTests\SqlServerInterogatorUnitTests.csproj", "{786ED957-E0D5-4F29-874C-1765468459D5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{381CEE53-2813-4478-443F-C143522667C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{381CEE53-2813-4478-443F-C143522667C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{381CEE53-2813-4478-443F-C143522667C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{604FAB03-DEFA-A677-491F-72A1F1644786}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{604FAB03-DEFA-A677-491F-72A1F1644786}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{604FAB03-DEFA-A677-491F-72A1F1644786}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{604FAB03-DEFA-A677-491F-72A1F1644786}.Release|Any CPU.Build.0 = Release|Any CPU
+		{786ED957-E0D5-4F29-874C-1765468459D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{786ED957-E0D5-4F29-874C-1765468459D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{786ED957-E0D5-4F29-874C-1765468459D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{786ED957-E0D5-4F29-874C-1765468459D5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
