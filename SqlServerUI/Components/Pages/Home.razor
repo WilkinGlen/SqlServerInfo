@@ -42,7 +42,9 @@
                             <MudTd DataLabel="Column Name">@context.Name</MudTd>
                             <MudTd DataLabel="Data Type">@context.DataType</MudTd>
                             <MudTd DataLabel="Is Nullable">@context.IsNullable.ToString()</MudTd>
-                            <MudIconButton Icon="@Icons.Material.Filled.Add" aria-label="add" @onclick="@(() => this.AddColumn(context))" />
+                            <MudTd>
+                                <MudIconButton Icon="@Icons.Material.Filled.Add" aria-label="add" @onclick="@(() => this.AddColumn(context))" />
+                            </MudTd>
                         </RowTemplate>
                     </MudTable>
                 </MudStack>
@@ -69,7 +71,9 @@
                             <MudTd DataLabel="Column Name">@context.Name</MudTd>
                             <MudTd DataLabel="Data Type">@context.DataType</MudTd>
                             <MudTd DataLabel="Is Nullable">@context.IsNullable.ToString()</MudTd>
-                            <MudIconButton Icon="@Icons.Material.Filled.Delete" aria-label="delete" @onclick="@(() => this.RemoveColumn(context))" />
+                            <MudTd>
+                                <MudIconButton Icon="@Icons.Material.Filled.Remove" aria-label="remove" @onclick="@(() => this.RemoveColumn(context))" />
+                            </MudTd>
                         </RowTemplate>
                     </MudTable>
                 </MudStack>

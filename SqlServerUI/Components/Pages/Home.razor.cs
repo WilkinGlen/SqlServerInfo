@@ -42,7 +42,6 @@ public sealed partial class Home
     {
         if (!this.selectedColumns.Contains(columnInfo))
         {
-
             this.selectedColumns.Add(columnInfo);
             if(this.selectedColumns.Count > 0)
             {
