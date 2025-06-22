@@ -17,7 +17,7 @@
                             <MudListSubheader>
                                 <MudText Typo="Typo.h6">Tables</MudText>
                             </MudListSubheader>
-                            @foreach (var table in database.Tables)
+                            @foreach (var table in this.GetJoinableTables(database))
                             {
                                 <MudListItem Value="@table" Text="@table.Name" />
                             }

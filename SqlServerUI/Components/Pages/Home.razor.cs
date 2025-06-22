@@ -42,6 +42,7 @@ public sealed partial class Home
     {
         if (!this.selectedColumns.Contains(columnInfo))
         {
+
             this.selectedColumns.Add(columnInfo);
             if(this.selectedColumns.Count > 0)
             {
@@ -58,6 +59,29 @@ public sealed partial class Home
                 this.generatedSql = string.Empty;
             }            
         }
+    }
+
+    private List<TableInfo> GetJoinableTables(DatabaseInfo databaseInfo)
+    {
+        if (selectedColumns == null || selectedColumns.Count == 0)
+        {
+            return databaseInfo.Tables;
+        }
+
+        var selectedTableIds = selectedColumns.Select(c => c.TableId).ToHashSet();
+        var selectedTables = databaseInfo.Tables.Where(t => selectedTableIds.Contains(t.TableId)).ToList();
+        var joinableTables = selectedTables
+            .SelectMany(t => t.TablesICanJoinTo)
+            .Distinct()
+            .ToList();
+
+        foreach (var t in selectedTables)
+        {
+            if (!joinableTables.Contains(t))
+                joinableTables.Add(t);
+        }
+
+        return joinableTables;
     }
 
     private void RemoveColumn(ColumnInfo columnInfo)
