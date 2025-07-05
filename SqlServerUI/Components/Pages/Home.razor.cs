@@ -75,7 +75,9 @@ public sealed partial class Home
         foreach (var t in selectedTables)
         {
             if (!joinableTables.Contains(t))
+            {
                 joinableTables.Add(t);
+            }
         }
 
         return joinableTables;
